@@ -20,14 +20,12 @@ if old_file and new_file:
     col1, col2 = st.columns(2)
     with col1:
         old_sheet = st.selectbox(" اختر ورقة ERP", old_sheets, key="erp_sheet")
-        old_skiprows = st.number_input("تخطي صفوف (ERP)", min_value=0, max_value=20, value=0)
     with col2:
         new_sheet = st.selectbox(" اختر ورقة Cloud", new_sheets, key="cloud_sheet")
-        new_skiprows = st.number_input("تخطي صفوف (Cloud)", min_value=0, max_value=20, value=0)
 
     # قراءة البيانات
-    df_old = pd.read_excel(old_file, sheet_name=old_sheet, skiprows=old_skiprows)
-    df_new = pd.read_excel(new_file, sheet_name=new_sheet, skiprows=new_skiprows)
+    df_old = pd.read_excel(old_file, sheet_name=old_sheet)
+    df_new = pd.read_excel(new_file, sheet_name=new_sheet)
 
     df_old.columns = df_old.columns.str.strip()
     df_new.columns = df_new.columns.str.strip()
@@ -82,11 +80,6 @@ if old_file and new_file:
         if differences:
             diff_df = pd.DataFrame(differences, columns=["الرقم الوظيفي", "الدائرة", "العمود", "القيمة القديمة", "القيمة الجديدة"])
             st.success(f" تم العثور على {len(diff_df)} فرق من النوع (NULL vs قيمة).")
-
-            #  فلتر بحث
-            emp_filter = st.text_input(" ابحث برقم وظيفي أو جزء من الرقم")
-            if emp_filter:
-                diff_df = diff_df[diff_df["الرقم الوظيفي"].astype(str).str.contains(emp_filter.strip())]
 
             #  رسم بياني
             fig = px.bar(diff_df['العمود'].value_counts().reset_index(),
