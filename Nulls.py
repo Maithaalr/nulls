@@ -81,12 +81,6 @@ if old_file and new_file:
             diff_df = pd.DataFrame(differences, columns=["الرقم الوظيفي", "الدائرة", "العمود", "القيمة القديمة", "القيمة الجديدة"])
             st.success(f" تم العثور على {len(diff_df)} فرق من النوع (NULL vs قيمة).")
 
-            #  رسم بياني
-            fig = px.bar(diff_df['العمود'].value_counts().reset_index(),
-                         x='index', y='العمود',
-                         labels={'index': 'العمود', 'العمود': 'عدد التغييرات'},
-                         title=" عدد التغييرات (NULL فقط) حسب العمود")
-            st.plotly_chart(fig, use_container_width=True)
 
             #  Tabs حسب الأعمدة
             changed_columns = diff_df['العمود'].unique().tolist()
